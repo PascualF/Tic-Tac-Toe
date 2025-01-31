@@ -1,13 +1,14 @@
 const boxes = document.querySelectorAll("div.box");
 const btnStart = document.querySelector(".btn-Start");
+const btnRestart = document.querySelector(".btn-Restart")
 const gridPlay = document.querySelector(".grid-play")
-const display = document.querySelector(".display")
+const display = document.querySelector(".display");
+const modal = document.querySelector(".modal")
+const modalDisplay = document.querySelector(".modal-display")
 
-let gameBoard = [
-    '','','',
-    '','','',
-    '','',''
-]
+function gameBoard() {
+    return['','','','','','','','','']
+}
 
 const currentPlayer = {};
 
@@ -30,12 +31,25 @@ const winCases = [
 ]
 
 // this function checks the arrays of each player with the winning cases.
-const checkWinner = (arr, values) => {
-    values.every((v) => v.includes)
+const checkWinner = (arr1, arr2) => {
+    return arr2.every(el => arr1.includes(el))
 }
 
-btnStart.addEventListener('click', (e) => {
+const setWinner = (winner) => {
+    display.textContent = `You won ${winner}!`;
+    gridPlay.style.display = 'none';
+    modal.style.display = 'flex'
+    modalDisplay.textContent = 'Press restart to play again, with the same people or change names.'
+}
 
+function startGame(){
+    gameBoard()
+    arrX = [];
+    arrO = [];
+
+    boxes.forEach((box) => {
+        box.textContent = ''
+    })
     inputFirstPlayer = document.querySelector('#firstPlayer').value;
     inputSecondPlayer = document.querySelector('#secondPlayer').value;
     symbolFirstPlayer = 'X';
@@ -44,20 +58,24 @@ btnStart.addEventListener('click', (e) => {
     if (inputFirstPlayer === '' || inputSecondPlayer === '') {
         display.textContent = `Both players should have a name to start a game.`
     } else {
+        modal.style.display = 'none'
         gridPlay.style.display = 'grid';
         btnStart.textContent = 'Restart Game';
         currentPlayer['name'] = inputFirstPlayer;
         currentPlayer['symbol'] = symbolFirstPlayer
         display.textContent = `${currentPlayer.name} start with the symbol ${currentPlayer.symbol}`
     }
-})
+}
+
+btnStart.addEventListener('click', () => startGame())
+btnRestart.addEventListener('click', () => startGame())
 
 boxes.forEach((box) => {
     box.addEventListener('click', (e) => {
-        let gameFinish = false
+        let winnerX
+        let winnerO
 
         const boxPressed = Number(box.dataset.box)
-        console.log(currentPlayer)
         if (e.target.textContent === ''){
             if (currentPlayer.symbol === 'X') {
                 arrX.push(boxPressed)
@@ -66,6 +84,23 @@ boxes.forEach((box) => {
             }
             gameBoard[boxPressed] = currentPlayer.symbol;
             e.target.textContent = currentPlayer.symbol;
+            
+            
+            display.textContent = `${currentPlayer.name} with the symbol ${currentPlayer.symbol}`
+            winCases.forEach((c) => {
+                winnerX = checkWinner(arrX, c)
+                winnerO = checkWinner(arrO, c)
+            if (winnerO === true || winnerX === true) {
+                if (winnerO === true){
+                    return setWinner(currentPlayer.name)
+                } else if (winnerX === true) {
+                    return setWinner(currentPlayer.name)
+                }
+            }
+        });
+
+
+            
             if (currentPlayer.symbol === 'X') {
                 currentPlayer['name'] = inputSecondPlayer;
                 currentPlayer['symbol'] = symbolSecondPlayer
@@ -75,13 +110,6 @@ boxes.forEach((box) => {
             }
         }
 
-        console.log('arrX ' + arrX)
-        console.log('arrO ' + arrO)
-        winCases.forEach((c) => {
-            console.log(checkWinner())
-            console.log(checkWinner())
-        });
-        display.textContent = `${currentPlayer.name} start with the symbol ${currentPlayer.symbol}`
         
     })
 })

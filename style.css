@@ -20,6 +20,22 @@ input{
     border-radius: 5px;
 }
 
+.modal{
+    position: absolute;
+    top: 51.5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display:none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 40rem;
+    height: calc(40rem / 3.1);
+    background-color: antiquewhite;
+}
+
 #firstPlayer{
     margin-left: 6.5px;
     margin-top: 1rem;
@@ -39,7 +55,7 @@ p{
 }
 
 .grid-play {
-    display: grid;
+    display: none;
     grid-template-columns: auto auto auto;
     margin: auto;
     height: 40rem;
